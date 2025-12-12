@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+
+        <h1 class="text-center text-2xl font-bold mb-6">Drop an Review</h1>
+
+        <form id="userpage" class="space-y-4">
+
+            <!-- Review container -->
+            <div>
+                <textarea placeholder="What's on your mind?" 
+                          id="review"
+                          rows="5"
+                          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"></textarea>
+
+                <!--  word count -->
+                <p id="wordCount" class="text-right text-sm text-gray-600 mt-1">0 / 200</p>
+
+                <span class="reviewerror text-red-500 text-sm hidden">
+                     Exceeds limit!! Maximum 200 words allowed
+                </span>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit"
+                class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors"
+                id="submitBtn">Submit</button>
+        </form>
+
+        <script>
+            const form = document.getElementById("userpage");
+            const review = document.getElementById("review");
+            const wordCountDisplay = document.getElementById("wordCount");
+
+            
+            const reviewRegex = /^(?:\S+(?:\s+\S+){0,199})$/;
+
+            
+            review.addEventListener("input", function () {
+                let words = review.value.trim().split(/\s+/).filter(word => word.length > 0);
+                let count = words.length;
+
+                wordCountDisplay.textContent = count + " / 200";
+
+                if (count > 200) {
+                    wordCountDisplay.classList.add("text-red-500");
+                } else {
+                    wordCountDisplay.classList.remove("text-red-500");
+                }
+            });
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                let validation = true;
+                let words = review.value.trim().split(/\s+/).filter(word => word.length > 0);
+
+                if (words.length > 200 || !reviewRegex.test(review.value.trim())) {
+                    document.querySelector(".reviewerror").classList.remove("hidden");
+                    validation = false;
+                } else {
+                    document.querySelector(".reviewerror").classList.add("hidden");
+                }
+
+                if (validation) {
+                    alert("Thanks for your review!!");
+                    form.reset();
+                    wordCountDisplay.textContent = "0 / 200";
+                }
+            });
+        </script>
+
+    </div>
+
+</body>
+</html>
+
